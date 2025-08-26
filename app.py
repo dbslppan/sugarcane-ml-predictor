@@ -799,6 +799,14 @@ elif page == "🔮 Prediction":
                         file_name=f"sugarcane_predictions_with_areas_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
                         mime="text/csv"
                     )
+
+                    excel = download_df.to_excel(index=False, engine='openpyxl')
+                    st.download_button(
+                        label="📥 Download Predictions as Excel",
+                        data=excel,
+                        file_name=f"sugarcane_predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
                     
             except Exception as e:
                 st.error(f"Error during prediction: {str(e)}")
@@ -947,4 +955,5 @@ st.markdown(
     </div>
     """, 
     unsafe_allow_html=True
+
 )
