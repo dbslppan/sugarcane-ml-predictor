@@ -12,6 +12,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
 import warnings
+import io
 warnings.filterwarnings('ignore')
 
 # Page configuration
@@ -800,10 +801,14 @@ elif page == "🔮 Prediction":
                         mime="text/csv"
                     )
 
-                    excel = download_df.to_excel(index=False, engine='openpyxl')
+                    excel_stream = io.BytesIO()
+                    with pd.ExcelWriter(excel_stream, engine='openpyxl') as writer:
+                        download_df.to_excel(writer, index=False, sheet_name="Predictions")
+                    excel_stream.seek(0)
+
                     st.download_button(
                         label="📥 Download Predictions as Excel",
-                        data=excel,
+                        data=excel_stream,
                         file_name=f"sugarcane_predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
@@ -957,3 +962,4 @@ st.markdown(
     unsafe_allow_html=True
 
 )
+
